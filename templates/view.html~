@@ -1,0 +1,60 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}style.css">
+	<title>xkcd Social - {{title}}</title>
+</head>
+<body>
+	<div id='head'>
+		<h1> xkcd </h1>
+		<h2> Social</h2>
+	
+	</div>
+
+	<div id='content'>
+		<div id='title'>
+			<h2>{{title}}</h2>
+		</div>
+
+		<div id='comic'>
+			<img src={{link}} title={{altext}} alt={{title}}>
+		</div>
+
+		<div id='desc'>
+			<p>{{altext}}</p>
+		</div>
+	</div>
+
+
+	<div id='comments'>
+	{% if user %}
+		<form method="post" action="/xkcd_social/{{id}}/save_comment/"> {% csrf_token %}
+			NAME: <input type="hidden" name={{user}}></br>
+            <textarea name="comment" rows="3" cols="60"> </textarea><br/>
+      		<input type="submit" value="Comment"/><br/>
+
+     {% else %}
+     	 <form action="/accounts/auth/{{id}}" method="post"> {% csrf_token %}
+    		<label for="username"> User Name :</label>
+    		<input type="text" name="username" value="" id="username"><br/>
+    		<label for="password"> Password:</label>
+    		<input type="password" name="password" value="" id="password"><br/>
+    		<input type="submit" value="login" />
+     {%endif%}
+
+
+
+	</div>
+
+	<table  border="1">
+		<tr>
+		  <td>Name of author</td>
+		  <td>COMMENT</td>
+		 </tr>
+		{% for comment in comments %}
+		  	<tr>
+  				<td> {{comment.name}}
+                <td>{{comment.comment}}</td>
+            </tr>
+        {%endfor%}
+    </table>
+</html>
